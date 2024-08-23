@@ -5,3 +5,4 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'password', 'email']
+#se crea un serializer para hacer que los datos dados se convierten en json
