@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  chanchito:
+    build: .
+    ports:
+      -"3000:3000"
+    link:
+      - monguito
+  monguito:
+    image: mongo
+    ports:
+      - "27017:27017"
+    enviroment:
+      - MONGO_INITDB_ROOT_USERNAME=nico
+      - MONGO_INITDB_ROOT_PASSWORD=password
