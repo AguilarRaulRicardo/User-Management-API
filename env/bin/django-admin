@@ -1,6 +1,4 @@
-#!/bin/sh
-'''exec' "/home/estebantrueba/Documentos/ProyectosDjango/Api de authenticacion/env/bin/python" "$0" "$@"
-' '''
+#!/home/estebantrueba/Documentos/Backends_ecommerse/authentication_api/env/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

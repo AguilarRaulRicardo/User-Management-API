@@ -9,7 +9,7 @@ from rest_framework import status
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
-from .serializer import UserSerializer
+from .serializer import UserSerializer, ChangePasswordSerializer
 
 # Create your views here.
 @api_view(['POST'])
@@ -50,7 +50,7 @@ def login(request):
     token, created = Token.objects.get_or_create(user = user)
     #se obtienen el token del usuario
 
-    return Response({'user': serializer.data, 'token': token.key}, status= status.HTTP_201_CREATED)
+    return Response({'user': serializer.data, 'token': token.key}, status= status.HTTP_200_OK)
     #se devuelve el token del usuario y los datos del usuario
 
 @api_view(['GET'])
@@ -58,7 +58,7 @@ def login(request):
 @permission_classes({IsAuthenticated})
 #se pide el token de autorizacion y si el usuario esta autenticado
 def log(request):
-    print("request.user")
+    print(request.user.password)
     return Response({'nice':'Perfecto'}, status=status.HTTP_200_OK)
 
 
@@ -132,8 +132,25 @@ def make_staff(request):
     except User.DoesNotExist:
         return Response({"Error": 'User dont exist'}, status= status.HTTP_404_NOT_FOUND)
 
-    user.is_staff = True
     user.save()
     return Response({'success':'success'}, status = status.HTTP_200_OK)
 
-#tienes que crear otro apartado para los comentarios
+
+@api_view(["PATCH"])
+@authentication_classes([TokenAuthentication])
+@permission_classes({IsAuthenticated})
+def change_password(request):
+    user_id = request.user.id 
+    serializer = ChangePasswordSerializer(data = request.data)
+    try:
+        user = User.objects.get(id = user_id)
+        if serializer.is_valid():
+            user.set_password(serializer.data["password"]) 
+            user.save()
+
+            return Response({"Check": "Password changed"}, status= status.HTTP_200_OK) 
+        else:
+            return Response({"Error": serializer.errors}, status= status.HTTP_400_BAD_REQUEST) 
+    except User.DoesNotExist:
+        return Response({"Error": 'User dont exist'}, status= status.HTTP_404_NOT_FOUND)
+        

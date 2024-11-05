@@ -17,7 +17,7 @@ This is a user management API that allows for the creation, login, and managemen
 - **SQLite3** (or any database of your choice): As the database backend.
 
 ## Prerequisites
-
+    
 - **Python 3.x**
 - **Django 5.x** or higher
 - **SQLite3** or another compatible database
